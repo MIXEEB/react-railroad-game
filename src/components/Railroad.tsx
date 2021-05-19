@@ -20,7 +20,6 @@ export class Railroad extends React.Component<{}, {}> {
     render() {
         return (<div>
             <span>railroad</span>
-            
         </div>)
     }
 }

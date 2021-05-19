@@ -1,13 +1,12 @@
 import React from 'react';
-import Tilemap from './containers/Tilemap';
+import Game from './containers/Game';
 import { Provider } from 'react-redux'
-import { store } from './store/store'
+import { store } from './store'
 
-
-
+//  <Game></Game>
 function App() {
   return (<Provider store={store}>
-    <Tilemap {...{}}></Tilemap>
+    <Game {...{}}></Game>
   </Provider>);
 }
 

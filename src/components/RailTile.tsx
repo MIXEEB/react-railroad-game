@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Vector2 } from '../models';
+import RailTileDiv from './common-styled/RailTileDiv'
 
 interface Props {
     railTileImage: string,
@@ -13,13 +14,6 @@ const GroundTileDiv = styled.div`
     height: 128px;
     background-image: url(${(props: Props) => props.groundTileImage })
 `
-
-const RailTileDiv = styled.div`
-    width: 128px;
-    height: 128px;
-    background-image: url(${(props: Props) => props.railTileImage })
-`
-
 export class RailTile extends React.Component<Props, {}>{ 
 
     constructor (props: Props) {
