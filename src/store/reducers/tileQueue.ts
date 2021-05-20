@@ -14,6 +14,7 @@ export const tileQueueSlice = createSlice({
     }
 })
 
+export const tileQueueAcitons = tileQueueSlice.reducer;
 
 /*const nextTilesSlice = createSlice({
     name: 'nextTiles',

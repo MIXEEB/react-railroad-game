@@ -4,12 +4,14 @@ import { GameLayout } from '../components/GameLayout';
 import { Tile } from '../models';
 import { State } from '../store';
 import { TileGenerator } from '../store/helpers/TileGenerator';
-import { actions } from '../store/reducers/tileMap';
+import { tileMapActions } from '../store/reducers/tileMap';
+import { tileQueueAcitons } from '../store/reducers/tileQueue';
 
 //put some data ere
 interface Props { 
     tileMap?: Tile[][],
     tileQueue?: Tile[],
+    placeRailTile: (tile: Tile) => void,
     rebuild: () => void
 }
 
@@ -23,9 +25,13 @@ class Game extends React.Component<Props> {
     }
 
     render() {
-        const { tileQueue } = this.props;
+        const { tileQueue, tileMap, placeRailTile} = this.props;
+        console.log('props data form ')
         return (<div>
-            <GameLayout tileQueue={tileQueue || []}>
+            <GameLayout 
+                tileQueue={tileQueue || []} tileMap={tileMap || [[]]}
+                placeRailTile={(tile: Tile) => placeRailTile(tile)}
+                >
             </GameLayout>
         </div>)
 
@@ -41,7 +47,11 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        rebuild: () => dispatch(actions.rebuild(TileGenerator.getEmptyTileMap({x: 3, y: 3})))
+        placeRailTile: (tile: Tile) => {
+            dispatch(tileMapActions.placeRailTile(tile));
+            //dispatch(actions.)
+        },
+        rebuild: () => dispatch(tileMapActions.rebuild(TileGenerator.getEmptyTileMap({x: 3, y: 3})))
     };
 }
 

@@ -5,7 +5,9 @@ import { TileMap } from './TileMap';
 import { TileQueue } from './TileQueue';
 
 interface Props {
-    tileQueue: Tile[]
+    tileMap: Tile[][],
+    tileQueue: Tile[],
+    placeRailTile: (tile: Tile) => void
 }
 
 
@@ -32,7 +34,8 @@ export class GameLayout extends React.Component<Props> {
     render() {
         return (<GameArea>
             <TileQueue {...this.props}></TileQueue>
-            <TileMap></TileMap>
+            <TileMap {...this.props} placeRailTile={this.props.placeRailTile}></TileMap>
         </GameArea>)
     }
 }
+
