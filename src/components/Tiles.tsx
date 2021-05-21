@@ -1,9 +1,12 @@
 import * as React from 'react'
 import styled from 'styled-components';
-import { Tile } from '../models';
+import { Tile, Vector2 } from '../models';
 
 import railHorizontal from '../assets/railHorizontal.png'
 import railVertical from '../assets/railVertical.png'
+
+//import for test put it here 
+import entrance from '../assets/entrance.png'
 
 interface GroundTileSpriteProps {
     groundTileImage: string,
@@ -23,7 +26,9 @@ const GroundTileSprite = styled(AbstractTileSprite)`
 interface GroundTileProps {
     groundTileImage: string,
     shadowRailTile: any,
-    railTile?: any
+    railTile?: any,
+    position: Vector2,
+    showEntranceExit: boolean,
     placeRailTile: (tile: Tile) => void
 }
 
@@ -43,8 +48,28 @@ const Dummy1 = styled.div`
     position: absolute;
     width: 128px;
     height: 128px;
+    margin-left: -128px;
+    transform: rotate(180deg);
     background-image: url(${(props: PropsA) => props.im})
 `;
+
+const EntranceTileSprie = styled.div `
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    margin-left: -128px;
+`
+
+interface EntranceTileProps {
+
+}
+
+class EntranceTile extends React.Component<EntranceTileProps>{
+    constructor(props: EntranceTileProps) {
+        super(props);
+    }
+}
+
 export class GroundTile extends React.Component<GroundTileProps, GroundTileState> {
     constructor(props: GroundTileProps){
         super(props);
@@ -60,6 +85,9 @@ export class GroundTile extends React.Component<GroundTileProps, GroundTileState
                 groundTileImage={this.props.groundTileImage}
                 onMouseLeave={() => this.setState({showShadow: false})} 
                 onMouseEnter={() => this.setState({showShadow: true})}>
+                {
+                    this.props.showEntranceExit && <Dummy1 im={entrance}></Dummy1>
+                }
                 <AbsoluteRailWrapper>{this.props.railTile}</AbsoluteRailWrapper>                
                 {
                     this.state.showShadow && <AbsoluteRailWrapper>{this.props.shadowRailTile}</AbsoluteRailWrapper>

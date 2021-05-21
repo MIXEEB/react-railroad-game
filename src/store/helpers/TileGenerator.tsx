@@ -35,10 +35,11 @@ export class TileGenerator {
         };
     }
 
-    static getRandomTileType(): TileType {
-        const rnd = Math.random();
-        return rnd > .5 ? TileType.HORIZONTAL : TileType.VERTICAL;
-    }
+    static getRandomTileType(): TileType { 
+        const rnd = Math.floor(Math.random() * 6);
+        const typeKey = TileType[rnd];
+        return TileType[typeKey as keyof typeof TileType];
+       }
 
     static getEmptyTile(position: Vector2): Tile {
         return {
