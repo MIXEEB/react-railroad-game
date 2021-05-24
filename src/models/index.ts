@@ -65,3 +65,20 @@ export interface Tile {
     type: TileType;
     position: Vector2;
 }
+
+export enum FacingDirection {
+    UP = 1,
+    DOWN = 2,
+    LEFT = 3,
+    RIGHT = 4
+};
+
+export interface Tunnel{
+    position: Vector2,
+    facingDirection: FacingDirection
+}
+
+export interface Tunnels { 
+    entrance: Tunnel,
+    exit: Tunnel
+}

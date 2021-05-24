@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components';
-import { Tile, Vector2 } from '../models';
+import { getTileTypeImage, Tile, TileType, Vector2 } from '../models';
 
 import railHorizontal from '../assets/railHorizontal.png'
 import railVertical from '../assets/railVertical.png'
@@ -23,12 +23,12 @@ const GroundTileSprite = styled(AbstractTileSprite)`
 `
 
 
+
 interface GroundTileProps {
-    groundTileImage: string,
+    tile: Tile,
+    //tunnels: Tunnels
+    railTile: any,
     shadowRailTile: any,
-    railTile?: any,
-    position: Vector2,
-    showEntranceExit: boolean,
     placeRailTile: (tile: Tile) => void
 }
 
@@ -53,22 +53,42 @@ const Dummy1 = styled.div`
     background-image: url(${(props: PropsA) => props.im})
 `;
 
-const EntranceTileSprie = styled.div `
+interface EntranceTileProps {
+    top: number,
+    right: number,
+    bottom: number,
+    left: number,
+    backgroundImage: string
+}
+
+
+const EntranceTileSprite = styled.div `
     position: absolute;
     width: 128px;
     height: 128px;
-    margin-left: -128px;
+    
+    background-image: url(${(props: EntranceTileProps) => { return props.backgroundImage; }})
 `
 
-interface EntranceTileProps {
-
-}
-
-class EntranceTile extends React.Component<EntranceTileProps>{
+class TunnelTile extends React.Component<EntranceTileProps>{
     constructor(props: EntranceTileProps) {
         super(props);
     }
+
+    //margin: ${(props: EntranceTileProps) => { return `${props.top}px ${props.right}px ${props.bottom}px ${props.left}px` }};
+
+    render() {
+        return (<EntranceTileSprite {...this.props}></EntranceTileSprite>)    
+    }
 }
+
+/*
+backgroundImage={entrance}
+            top={-128}
+            right={0}
+            bottom={0} 
+            left={0}
+*/
 
 export class GroundTile extends React.Component<GroundTileProps, GroundTileState> {
     constructor(props: GroundTileProps){
@@ -79,14 +99,42 @@ export class GroundTile extends React.Component<GroundTileProps, GroundTileState
         }
     }
 
+    showEntranceExit() {
+
+    }
+
     render() {
-        console.log(railVertical,railHorizontal);
+        /*
+        if (this.props.showEntranceExit){
+            debugger;
+        }
+        */
+
+    /*
+    tunnelData={getTunnelData(tile)}
+    position={tile.position}
+    groundTileImage={getTileTypeImage(TileType.EMPTY)} 
+    */
+
+    //groundTileImage: string,
+    //railTile?: any,
+    //position: Vector2,
+    //showEntranceExit: boolean,
+    //tunnelDirection: FacingDirection,
+
+
         return <GroundTileSprite 
-                groundTileImage={this.props.groundTileImage}
+                groundTileImage={getTileTypeImage(TileType.EMPTY)}
                 onMouseLeave={() => this.setState({showShadow: false})} 
                 onMouseEnter={() => this.setState({showShadow: true})}>
                 {
-                    this.props.showEntranceExit && <Dummy1 im={entrance}></Dummy1>
+                    /*this.showEntranceExit() && <TunnelTile 
+                        backgroundImage={entrance}
+                        top={0}
+                        right={0}
+                        bottom={0} 
+                        left={0}></TunnelTile>
+                    */
                 }
                 <AbsoluteRailWrapper>{this.props.railTile}</AbsoluteRailWrapper>                
                 {

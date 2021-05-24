@@ -43,9 +43,18 @@ export class TileMap extends React.Component<Props>{
     }
 
     showEntranceExit(position: Vector2){
-        return (position.x === this.props.tileMap.exit.x && position.y === this.props.tileMap.exit.y) ||
-            (position.x === this.props.tileMap.entrance.x && position.y === this.props.tileMap.entrance.y);
+        const { position: exitPosition } = this.props.tileMap.exit;
+        const { position: entrancePosition } = this.props.tileMap.entrance;
+
+        return (position.x == entrancePosition.x && position.y == entrancePosition.y) ||
+            (position.x == exitPosition.x && position.y == exitPosition.y);
     }   
+
+    /*
+    tunnelData={getTunnelData(tile)}
+    position={tile.position}
+    groundTileImage={getTileTypeImage(TileType.EMPTY)} 
+    */
 
     render(){
         const { tileMap, tileQueue, placeRailTile } = this.props;
@@ -57,9 +66,7 @@ export class TileMap extends React.Component<Props>{
                         { 
                             tileRow.map((tile: Tile) => (
                                 <GroundTile key={tile.id} 
-                                    showEntranceExit={this.showEntranceExit(tile.position)}
-                                    position={tile.position}
-                                    groundTileImage={getTileTypeImage(TileType.EMPTY)} 
+                                    tile={tile}
                                     placeRailTile={placeRailTile}
                                     shadowRailTile={
                                         <ShadowRailTile 
