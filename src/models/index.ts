@@ -5,11 +5,15 @@ import railRightUp from '../assets/railRightUp.png';
 import railLeftDown from '../assets/railLeftDown.png';
 import railRightDown from '../assets/railRightDown.png';
 import ground from '../assets/ground.png';
+import wall from '../assets/wall.png';
+import tunnel from '../assets/tunnel.png';
 
 export interface Vector2 {
     x: number,
     y: number
 }
+
+export const vector2Equals = (a: Vector2, b: Vector2) => a.x === b.x && a.y === b.y;
 
 export const getOutboundVector2 = (): Vector2 => { return {x: -1, y: -1} }
 
@@ -21,6 +25,8 @@ export enum TileType {
     RIGHTUP = 3,//"RIGHUP",
     LEFTDOWN = 4,//"LEFTDOWN",
     RIGHTDOWN = 5,//"RIGHTDOWN"
+    TUNNEL = 6,
+    WALL = 7,
     EMPTY = 100//, "EMPTY",
 }
 
@@ -47,6 +53,12 @@ export const getTileTypeImage = (tileType: TileType) => {
         case TileType.RIGHTDOWN:
             return railRightDown;
     
+        case TileType.TUNNEL:
+            return tunnel
+
+        case TileType.WALL:
+            return wall;
+        
         default:
             return ground;
     }
@@ -67,10 +79,10 @@ export interface Tile {
 }
 
 export enum FacingDirection {
-    UP = 1,
-    DOWN = 2,
-    LEFT = 3,
-    RIGHT = 4
+    right = 1,
+    bottom = 2,
+    left = 3,
+    top = 4
 };
 
 export interface Tunnel{

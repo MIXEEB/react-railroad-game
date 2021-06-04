@@ -1,12 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components';
-import { getTileTypeImage, Tile, TileType, Vector2 } from '../models';
+import { FacingDirection, getTileTypeImage, Tile, TileType, Tunnel, Tunnels, Vector2 } from '../models';
 
 import railHorizontal from '../assets/railHorizontal.png'
 import railVertical from '../assets/railVertical.png'
 
-//import for test put it here 
-import entrance from '../assets/entrance.png'
+import tunnel from '../assets/tunnel.png'
+import dwarf from '../assets/dwarf.png'
+import { dwarfCartActions, DwarfCartState } from '../store/reducers/dwarfCart';
 
 interface GroundTileSpriteProps {
     groundTileImage: string,
@@ -22,11 +23,10 @@ const GroundTileSprite = styled(AbstractTileSprite)`
     background-image: url(${(props: GroundTileSpriteProps) => props.groundTileImage})
 `
 
-
-
 interface GroundTileProps {
     tile: Tile,
-    //tunnels: Tunnels
+    dwarfCart: DwarfCartState | null,
+    tunnels: Tunnels,
     railTile: any,
     shadowRailTile: any,
     placeRailTile: (tile: Tile) => void
@@ -61,82 +61,124 @@ interface EntranceTileProps {
     backgroundImage: string
 }
 
+interface TunnelSpriteProps {
+    margin: string,
+    transform: string
+    backgroundImage: string
+}
 
 const EntranceTileSprite = styled.div `
     position: absolute;
     width: 128px;
     height: 128px;
-    
-    background-image: url(${(props: EntranceTileProps) => { return props.backgroundImage; }})
+    ${(props: TunnelSpriteProps) => props.margin}
+    ${(props: TunnelSpriteProps) => props.transform}
+    ${(props: TunnelSpriteProps) => props.backgroundImage}
 `
 
-class TunnelTile extends React.Component<EntranceTileProps>{
-    constructor(props: EntranceTileProps) {
-        super(props);
-    }
-
-    //margin: ${(props: EntranceTileProps) => { return `${props.top}px ${props.right}px ${props.bottom}px ${props.left}px` }};
-
-    render() {
-        return (<EntranceTileSprite {...this.props}></EntranceTileSprite>)    
-    }
+interface DwarfCartSpriteProps {
+    backgroundImage: string,
+    marginTop: string,
+    marginLeft: string
 }
+// background-image: url(${(props: PropsA) => props.im})
 
-/*
-backgroundImage={entrance}
-            top={-128}
-            right={0}
-            bottom={0} 
-            left={0}
-*/
+const DwarfCartSprite = styled.div `
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    ${(props: DwarfCartSpriteProps) => {console.log(props.marginTop); return props.marginTop; }}
+    ${(props: DwarfCartSpriteProps) => { console.log(props.marginLeft); return props.marginLeft; }}
+    background-image: url(${(props: DwarfCartSpriteProps) => props.backgroundImage})
+` 
+// 
 
 export class GroundTile extends React.Component<GroundTileProps, GroundTileState> {
     constructor(props: GroundTileProps){
         super(props);
-
         this.state = {
             showShadow: false
         }
     }
 
-    showEntranceExit() {
+    getTunnelStyleProps(tunnel: Tunnel)  {
+        const marginPostfix = FacingDirection[tunnel.facingDirection];
+        const enumNumeric = (tunnel.facingDirection as number);
+    
+        return {
+            margin: `margin-${marginPostfix}: ${Math.sign(enumNumeric) * 128}px;`,
+            transform: `transform: rotate(${(enumNumeric-1) * 90}dev);`,
+            backgroundImage: `background-image: url(${tunnel});`
+        }
+    }
 
+    getTunnelProps() {
+        const { position } = this.props.tile;
+        
+        const { position: exitPosition } = this.props.tunnels.exit;
+        const { position: entrancePosition } = this.props.tunnels.entrance;
+
+        const generateStyleProps = (tunnel: Tunnel) => {
+            const marginPostfix = FacingDirection[tunnel.facingDirection];
+            const enumNumeric = (tunnel.facingDirection as number);
+        
+            return {
+                margin: `margin-${marginPostfix}: ${Math.sign(enumNumeric) * 128}px;`,
+                transform: `transform: rotate(${(enumNumeric-1) * 90}dev);`,
+                backgroundImage: `background-image: url(${tunnel});`
+            }
+        }
+
+        if (position.x == entrancePosition.x && position.y == entrancePosition.y) {
+            return generateStyleProps(this.props.tunnels.entrance);
+        }
+
+        if (position.x == exitPosition.x && position.y == exitPosition.y) {
+            return generateStyleProps(this.props.tunnels.exit);
+        }
+
+        return null;
+    }
+
+    showEntranceExit() {
+        const { position } = this.props.tile;
+        
+        const { position: exitPosition } = this.props.tunnels.exit;
+        const { position: entrancePosition } = this.props.tunnels.entrance;
+
+        return (position.x == entrancePosition.x && position.y == entrancePosition.y) ||
+            (position.x == exitPosition.x && position.y == exitPosition.y);
+    }
+
+/*
+    const marginTop = Math.round((position.y % Math.floor(position.y) * 10));
+    const marginLeft = Math.round((position.x % Math.floor(position.x) * 10));
+        
+*/
+
+    getDwarfMargin = (value: number): {marginTop: string, marginLeft: string} => {
+        return {
+            marginLeft: `margin-left: ${value}px;`,
+            marginTop: 'margin-top: 0px;'
+        }
     }
 
     render() {
-        /*
-        if (this.props.showEntranceExit){
-            debugger;
-        }
-        */
+        const { dwarfCart } = this.props;
+        const tunnelProps = this.getTunnelProps();
 
-    /*
-    tunnelData={getTunnelData(tile)}
-    position={tile.position}
-    groundTileImage={getTileTypeImage(TileType.EMPTY)} 
-    */
-
-    //groundTileImage: string,
-    //railTile?: any,
-    //position: Vector2,
-    //showEntranceExit: boolean,
-    //tunnelDirection: FacingDirection,
-
-
+        const margin = dwarfCart ? this.getDwarfMargin(dwarfCart.animation.value) : {marginLeft: 'margin-left: 0px;', marginTop: 'margin-top 0px;'};
         return <GroundTileSprite 
                 groundTileImage={getTileTypeImage(TileType.EMPTY)}
                 onMouseLeave={() => this.setState({showShadow: false})} 
                 onMouseEnter={() => this.setState({showShadow: true})}>
                 {
-                    /*this.showEntranceExit() && <TunnelTile 
-                        backgroundImage={entrance}
-                        top={0}
-                        right={0}
-                        bottom={0} 
-                        left={0}></TunnelTile>
-                    */
+                    tunnelProps && <EntranceTileSprite {...tunnelProps}></EntranceTileSprite>
                 }
-                <AbsoluteRailWrapper>{this.props.railTile}</AbsoluteRailWrapper>                
+                <AbsoluteRailWrapper>{this.props.railTile}</AbsoluteRailWrapper>
+                {
+                    dwarfCart && <DwarfCartSprite backgroundImage={dwarf} marginLeft={margin.marginLeft} marginTop={margin.marginTop} ></DwarfCartSprite>
+                }
                 {
                     this.state.showShadow && <AbsoluteRailWrapper>{this.props.shadowRailTile}</AbsoluteRailWrapper>
                 }

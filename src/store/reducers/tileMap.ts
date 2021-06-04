@@ -1,5 +1,5 @@
 import { combineReducers, createReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FacingDirection, Tile, Vector2 } from "../../models";
+import { FacingDirection, Tile, Tunnels, Vector2 } from "../../models";
 import { TileGenerator } from "../helpers/TileGenerator";
 
 export interface Tunnel {
@@ -9,23 +9,22 @@ export interface Tunnel {
 
 export interface TileMapState {
     tiles: Tile[][],
-    entrance: Tunnel,
-    exit: Tunnel
+ 
+    //deprecated
+    tunnels: Tunnels    
 }
 
-//e//xport interface Tile
+//tiles: TileGenerator
+//TileGenerator.getEmptyTileMap({x: 5, y: 5}),
+//deprecated
 
 const getInitialState = (): TileMapState => {
     return {
-        tiles: TileGenerator.getEmptyTileMap({x: 5, y: 5}),
-        entrance: {
-            position: {x: 0, y: 0},
-            direction: FacingDirection.DOWN
-        },
-        exit: {
-            position: {x:4, y:4},
-            direction: FacingDirection.LEFT
-        }   
+        tiles: TileGenerator.getTestTileMap({x: 5, y: 5}),
+        tunnels: {
+            entrance: { position: {x: 0, y: 0}, facingDirection: FacingDirection.bottom },
+            exit: { position: {x: 4, y: 4}, facingDirection: FacingDirection.top }
+        }          
     }
 }
 
@@ -39,12 +38,9 @@ export const tileMapSlice = createSlice({
         placeRailTile: (state: TileMapState, action: PayloadAction<Tile>) => {
             const { position } = action.payload;
             state.tiles[position.x][position.y] = {...action.payload}
-            /*(if (state) {
-                const {position} = action.payload;
-                state[position.x][position.y] = {...action.payload}
-            }*/
+            
         }
     }
 })
 
-export const tileMapActions = tileMapSlice.actions;
+export const tileMapActions = tileMapSlice.actions

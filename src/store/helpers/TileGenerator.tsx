@@ -3,12 +3,52 @@ import { v4 as uuidv4 } from 'uuid';
 
 export class TileGenerator {
     
+    static getTestTileMap(fieldSize: Vector2): Tile[][] {
+        const tiles  = new Array(fieldSize.x);
+        for (let column = 0; column < fieldSize.x; column++) {
+            tiles[column] = new Array(fieldSize.y);
+            for (let row = 0; row < fieldSize.y; row++) {
+                const tileType = (row === 0 || column === 0 || row === fieldSize.y - 1 || column === fieldSize.y - 1) ? TileType.WALL : TileType.EMPTY; 
+                tiles[column][row] = TileGenerator.getTile({x: column, y:row}, tileType);
+            }
+        }
+
+        tiles[1][1] = {
+            ...tiles[1][1],
+            type: TileType.HORIZONTAL
+        }
+
+
+        tiles[2][1] = {
+            ...tiles[2][1],
+            type: TileType.HORIZONTAL
+        }
+
+        tiles[3][1] = {
+            ...tiles[3][1],
+            type: TileType.LEFTDOWN
+        }
+
+        tiles[3][2] = {
+            ...tiles[3][2],
+            type: TileType.VERTICAL
+        }
+
+        
+        tiles[3][3] = {
+            ...tiles[3][3],
+            type: TileType.VERTICAL
+        }
+        return tiles;
+    }
+
     static getEmptyTileMap(fieldSize: Vector2): Tile[][] {
         const tiles  = new Array(fieldSize.x);
         for (let column = 0; column < fieldSize.x; column++) {
             tiles[column] = new Array(fieldSize.y);
             for (let row = 0; row < fieldSize.y; row++) {
-                tiles[column][row] = TileGenerator.getEmptyTile({x: column, y:row})
+                const tileType = (row === 0 || column === 0 || row === fieldSize.y - 1 || column === fieldSize.y - 1) ? TileType.WALL : TileType.EMPTY; 
+                tiles[column][row] = TileGenerator.getTile({x: column, y:row}, tileType);
             }
         }
         return tiles;
@@ -41,6 +81,14 @@ export class TileGenerator {
         return TileType[typeKey as keyof typeof TileType];
        }
 
+    static getTile(position: Vector2, type: TileType): Tile {
+        return {
+            id: uuidv4(),
+            type,
+            position,
+        }
+    }
+/*
     static getEmptyTile(position: Vector2): Tile {
         return {
             id: uuidv4(),
@@ -48,7 +96,7 @@ export class TileGenerator {
             position
         };
     }
-
+*/
     static getRandomRailTile(position: Vector2): Tile {
         const rnd = Math.random();
         return {
