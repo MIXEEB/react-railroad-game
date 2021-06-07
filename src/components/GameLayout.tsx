@@ -62,9 +62,6 @@ export class GameLayout extends React.Component<Props> {
                 <TileQueue {...this.props}></TileQueue>
                 <TileMap {...this.props} placeRailTile={this.props.placeRailTile}></TileMap>
             </GameField>
-            <GameActions>
-                <StartButton onClick={startClick}></StartButton>
-            </GameActions>
         </GameArea>)
     }
 }

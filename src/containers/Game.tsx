@@ -8,7 +8,6 @@ import { dwarfCartActions, dwarfCartSlice, DwarfCartState } from '../store/reduc
 import { tileMapActions, TileMapState } from '../store/reducers/tileMap';
 import { tileQueueActions } from '../store/reducers/tileQueue';
 
-//put some data ere
 interface Props { 
     dwarfCart: DwarfCartState,
     tileMap: TileMapState,
@@ -18,12 +17,12 @@ interface Props {
     pushCartRequest: () => void
 }
 
+//implement landing here
+/* here is a list of todos:.. */
+//1.dynamic rail generator
+//2. starting the dwarf
 
-/*
-tasks:
 
-1. add start and exit
-*/
 class Game extends React.Component<Props> {
     
     private size: number = 128;
@@ -32,18 +31,18 @@ class Game extends React.Component<Props> {
         super(props);
 
         window.addEventListener('resize', this.handleResize)
-        this.recurcive = this.recurcive.bind(this);
+       // this.pushCart = this.pushCart.bind(this);
     }
 
     componentDidMount() {
        //this.recurcive();
     }
 
-    recurcive = () => {
+    pushCart = () => {
         const { pushCartRequest } = this.props;
         setTimeout(() => {
             pushCartRequest();
-            this.recurcive();
+            this.pushCart();
         }, 2000)
     }
 
@@ -51,14 +50,12 @@ class Game extends React.Component<Props> {
         console.log('window size changed', window.innerHeight, window.innerWidth);
     }
 
-
-
     render() {
         const { tileQueue, tileMap, dwarfCart, placeRailTile, pushCartRequest} = this.props;
         console.log('props data form ')
         return (<div>
             <GameLayout 
-                startClick={() => this.recurcive()}
+                startClick={() => this.pushCart()}
                 dwarfCart={dwarfCart}
                 tileQueue={tileQueue || []} tileMap={tileMap}
                 placeRailTile={(tile: Tile) => placeRailTile(tile)}>

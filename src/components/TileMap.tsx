@@ -60,9 +60,10 @@ export class TileMap extends React.Component<Props>{
         const { tileMap, tileQueue, dwarfCart, placeRailTile } = this.props;
         const firstTileFromQueue = tileQueue[0];
 
+        const { tiles } = tileMap;
         return (<TileMapLayout>
             {
-                tileMap.tiles.map((tileRow: Tile[]) => {
+                tiles.length > 0 && tileMap.tiles.map((tileRow: Tile[]) => {
                     return <TileMapRow key={`row_${tileRow[0].id}`}>
                         { 
                             tileRow.map((tile: Tile) => (

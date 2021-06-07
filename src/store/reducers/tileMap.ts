@@ -20,7 +20,8 @@ export interface TileMapState {
 
 const getInitialState = (): TileMapState => {
     return {
-        tiles: TileGenerator.getTestTileMap({x: 5, y: 5}),
+        tiles: [],
+
         tunnels: {
             entrance: { position: {x: 0, y: 0}, facingDirection: FacingDirection.bottom },
             exit: { position: {x: 4, y: 4}, facingDirection: FacingDirection.top }
@@ -32,6 +33,10 @@ export const tileMapSlice = createSlice({
     name: 'tileMap',
     initialState: getInitialState(),
     reducers: {
+        startGame: (state: TileMapState, action: PayloadAction<Vector2>) => {
+            state.tiles = TileGenerator.getEmptyTileMap(action.payload);
+        },
+
         rebuild: (state: TileMapState, action: PayloadAction<Tile[][]>) => {
             state.tiles = action.payload
         },

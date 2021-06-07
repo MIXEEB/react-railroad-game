@@ -1,9 +1,7 @@
 ## Info
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Previously I did not share any of my pet projects publicly, but I realised this is big mistake, so starting form this one, mistake will not be mage
-
-As a challange i decided to create small casual game using react js.
+This is a casual game created on react.js. This project is in progress. First playable version will be finished and deployed soon.
 
 ## Setup
 1. git clone https://github.com/MIXEEB/react-railroad-game
