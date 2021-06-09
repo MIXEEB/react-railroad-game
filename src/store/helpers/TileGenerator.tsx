@@ -1,5 +1,6 @@
 import { Vector2, Tile, getOutboundVector2, TileType } from "../../models";
 import { v4 as uuidv4 } from 'uuid';
+import random from 'random'
 
 export class TileGenerator {
     
@@ -43,6 +44,7 @@ export class TileGenerator {
     }
 
     static getEmptyTileMap(fieldSize: Vector2): Tile[][] {
+        //add walls
         const tiles  = new Array(fieldSize.x);
         for (let column = 0; column < fieldSize.x; column++) {
             tiles[column] = new Array(fieldSize.y);
@@ -51,8 +53,30 @@ export class TileGenerator {
                 tiles[column][row] = TileGenerator.getTile({x: column, y:row}, tileType);
             }
         }
+       
+        tiles[0][1] = { 
+            ...tiles[0][1],
+            type: TileType.TUNNEL
+        }
+
+         /*
+        debugger
+        tiles[fieldSize.x-1][fieldSize.y] = {
+            ...tiles[fieldSize.x-1][fieldSize.y],
+            type: TileType.TUNNEL
+        }
+        */
+        
         return tiles;
     }
+
+    /*
+    export interface Tile {
+    id: string,
+    type: TileType;
+    position: Vector2;
+}
+    */
 
     static initQueue(): Tile[] {
         const tiles: Tile[] = [];

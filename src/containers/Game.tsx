@@ -8,7 +8,7 @@ import { dwarfCartActions, dwarfCartSlice, DwarfCartState } from '../store/reduc
 import { tileMapActions, TileMapState } from '../store/reducers/tileMap';
 import { tileQueueActions } from '../store/reducers/tileQueue';
 
-interface Props { 
+interface GameProps { 
     dwarfCart: DwarfCartState,
     tileMap: TileMapState,
     tileQueue?: Tile[],
@@ -21,41 +21,71 @@ interface Props {
 /* here is a list of todos:.. */
 //1.dynamic rail generator
 //2. starting the dwarf
+interface GameState {
+    countdown: number;
+}
 
 
-class Game extends React.Component<Props> {
+class Game extends React.Component<GameProps, GameState> {
     
     private size: number = 128;
     
-    constructor(props: Props) {
+    constructor(props: GameProps) {
         super(props);
 
+        this.state = {
+            countdown: 5
+        }
+
         window.addEventListener('resize', this.handleResize)
-       // this.pushCart = this.pushCart.bind(this);
     }
 
     componentDidMount() {
+        const countdownInterval = setInterval(() => {
+            this.setState({
+                countdown: this.state.countdown - 1
+            })
+
+            if (this.state.countdown <= 0){
+                this.pushCart();
+                clearInterval(countdownInterval);
+            }
+        }, 1000)
+        //this.setTimeout(() => {}, 1000);
        //this.recurcive();
+
+       this.props.rebuild();
     }
 
     pushCart = () => {
+
+        const { pushCartRequest } = this.props
+        setInterval(() => {
+            pushCartRequest();
+        }, 2000)
+
+    }
+    /*pushCart = () => {
         const { pushCartRequest } = this.props;
         setTimeout(() => {
             pushCartRequest();
             this.pushCart();
         }, 2000)
     }
+    */
 
     handleResize(){
         console.log('window size changed', window.innerHeight, window.innerWidth);
     }
 
+    // /startClick={() => this.pushCart()}
     render() {
         const { tileQueue, tileMap, dwarfCart, placeRailTile, pushCartRequest} = this.props;
         console.log('props data form ')
         return (<div>
-            <GameLayout 
-                startClick={() => this.pushCart()}
+            <GameLayout
+                countdown={this.state.countdown}
+                
                 dwarfCart={dwarfCart}
                 tileQueue={tileQueue || []} tileMap={tileMap}
                 placeRailTile={(tile: Tile) => placeRailTile(tile)}>
@@ -83,7 +113,7 @@ const mapDispatchToProps = (dispatch: any) => {
             dispatch(tileMapActions.placeRailTile(tile));
             dispatch(tileQueueActions.pushForward())
         },
-        rebuild: () => dispatch(tileMapActions.rebuild(TileGenerator.getEmptyTileMap({x: 3, y: 3})))
+        rebuild: () => dispatch(tileMapActions.rebuild(TileGenerator.getEmptyTileMap({x: 4, y: 4})))
     };
 }
 

@@ -15,7 +15,7 @@ export interface DwarfCartState {
 
 const getInitialState = (): DwarfCartState => {
     return {
-        position: { x: 1, y: 1},
+        position: { x: 0, y: 1},
         direction: { x: 1, y: 0},
         animation: {
             isHorizontal: true,
