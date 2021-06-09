@@ -51,8 +51,6 @@ class Game extends React.Component<GameProps, GameState> {
                 clearInterval(countdownInterval);
             }
         }, 1000)
-        //this.setTimeout(() => {}, 1000);
-       //this.recurcive();
 
        this.props.rebuild();
     }
@@ -65,20 +63,11 @@ class Game extends React.Component<GameProps, GameState> {
         }, 2000)
 
     }
-    /*pushCart = () => {
-        const { pushCartRequest } = this.props;
-        setTimeout(() => {
-            pushCartRequest();
-            this.pushCart();
-        }, 2000)
-    }
-    */
-
+ 
     handleResize(){
         console.log('window size changed', window.innerHeight, window.innerWidth);
     }
 
-    // /startClick={() => this.pushCart()}
     render() {
         const { tileQueue, tileMap, dwarfCart, placeRailTile, pushCartRequest} = this.props;
         console.log('props data form ')

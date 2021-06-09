@@ -74,6 +74,7 @@ export class TileMap extends React.Component<Props>{
                                     placeRailTile={placeRailTile}
                                     shadowRailTile={
                                         <ShadowRailTile 
+                                            enabled={tile.type === TileType.EMPTY}
                                             placeRailTile={() => placeRailTile({...tileQueue[0], position: {...tile.position}})}
                                             railTileImage={getTileTypeImage(tileQueue[0].type)}>
                                         </ShadowRailTile>

@@ -188,11 +188,13 @@ export class GroundTile extends React.Component<GroundTileProps, GroundTileState
 
 interface ShadowRailTileProps {
     railTileImage: string,
+    enabled: boolean,
     placeRailTile: () => void
 }
 
 const ShadowRailTileSprite = styled(AbstractTileSprite)`
     opacity: 0.5;
+    background: ${(props: ShadowRailTileProps) => props.enabled ? 'none' : 'red'};
     background-image: url(${(props: ShadowRailTileProps) => props.railTileImage});
 `
 
@@ -202,11 +204,8 @@ export class ShadowRailTile extends React.Component<ShadowRailTileProps> {
     }
 
     render() {
-        const { placeRailTile } = this.props;
-
-        return (<ShadowRailTileSprite {...this.props} onClick={placeRailTile}>
-            
-        </ShadowRailTileSprite>)
+        const { placeRailTile, enabled } = this.props;
+        return (<ShadowRailTileSprite {...this.props} onClick={ enabled ? placeRailTile : () => null }></ShadowRailTileSprite>)
     }
 }
 
