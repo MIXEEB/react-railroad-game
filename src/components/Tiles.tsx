@@ -8,6 +8,7 @@ import railVertical from '../assets/railVertical.png'
 import tunnel from '../assets/tunnel.png'
 import dwarf from '../assets/dwarf.png'
 import { dwarfCartActions, DwarfCartState } from '../store/reducers/dwarfCart';
+import { EMPTY_VECTOR } from '../store/middleware/railHelpers';
 
 interface GroundTileSpriteProps {
     groundTileImage: string,
@@ -26,7 +27,6 @@ const GroundTileSprite = styled(AbstractTileSprite)`
 interface GroundTileProps {
     tile: Tile,
     dwarfCart: DwarfCartState | null,
-    tunnels: Tunnels,
     railTile: any,
     shadowRailTile: any,
     placeRailTile: (tile: Tile) => void
@@ -91,8 +91,6 @@ const DwarfCartSprite = styled.div `
     ${(props: DwarfCartSpriteProps) => { console.log(props.marginLeft); return props.marginLeft; }}
     background-image: url(${(props: DwarfCartSpriteProps) => props.backgroundImage})
 ` 
-// 
-
 export class GroundTile extends React.Component<GroundTileProps, GroundTileState> {
     constructor(props: GroundTileProps){
         super(props);
@@ -112,11 +110,16 @@ export class GroundTile extends React.Component<GroundTileProps, GroundTileState
         }
     }
 
+    //currently not used    
     getTunnelProps() {
         const { position } = this.props.tile;
         
-        const { position: exitPosition } = this.props.tunnels.exit;
-        const { position: entrancePosition } = this.props.tunnels.entrance;
+        //tunnels were in props
+        const exit: Tunnel = { position: EMPTY_VECTOR, facingDirection: FacingDirection.bottom }
+        const entrance: Tunnel = { position: EMPTY_VECTOR, facingDirection: FacingDirection.bottom }
+
+        const { position: exitPosition } = exit;
+        const { position: entrancePosition } = entrance;
 
         const generateStyleProps = (tunnel: Tunnel) => {
             const marginPostfix = FacingDirection[tunnel.facingDirection];
@@ -130,11 +133,11 @@ export class GroundTile extends React.Component<GroundTileProps, GroundTileState
         }
 
         if (position.x == entrancePosition.x && position.y == entrancePosition.y) {
-            return generateStyleProps(this.props.tunnels.entrance);
+            return generateStyleProps(entrance);
         }
 
         if (position.x == exitPosition.x && position.y == exitPosition.y) {
-            return generateStyleProps(this.props.tunnels.exit);
+            return generateStyleProps(exit);
         }
 
         return null;
@@ -143,8 +146,11 @@ export class GroundTile extends React.Component<GroundTileProps, GroundTileState
     showEntranceExit() {
         const { position } = this.props.tile;
         
-        const { position: exitPosition } = this.props.tunnels.exit;
-        const { position: entrancePosition } = this.props.tunnels.entrance;
+        const exit: Tunnel = { position: EMPTY_VECTOR, facingDirection: FacingDirection.bottom }
+        const entrance: Tunnel = { position: EMPTY_VECTOR, facingDirection: FacingDirection.bottom }
+
+        const { position: exitPosition } = exit;
+        const { position: entrancePosition } = entrance;
 
         return (position.x == entrancePosition.x && position.y == entrancePosition.y) ||
             (position.x == exitPosition.x && position.y == exitPosition.y);

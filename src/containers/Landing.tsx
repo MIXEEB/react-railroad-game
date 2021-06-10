@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { flushSync } from 'react-dom'
+import ReactModal from 'react-modal'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -22,10 +24,11 @@ interface RegularLabelProps {
 }
 const RegularLabel = styled.span`
     font-size: ${(props: RegularLabelProps) => props.fontSize}px;
+    font-family: 'True Crimes';
     color: white;
 `
 
-const StartButton = styled.div`
+const ComicButton = styled.div`
     border: none;
     background-color: Transparent;
     width: 300px;
@@ -101,6 +104,7 @@ interface LandingProps {
 
 interface LandingState {
     fieldSize: Vector2;
+    showModal: boolean;
 }
 
 class Landing extends React.Component<LandingProps, LandingState> {
@@ -108,6 +112,7 @@ class Landing extends React.Component<LandingProps, LandingState> {
     constructor(props: LandingProps) { 
         super(props);
         this.state = {
+            showModal: false,
             fieldSize: {
                 x: 5, y: 5
             }
@@ -129,11 +134,11 @@ class Landing extends React.Component<LandingProps, LandingState> {
             </FieldSizeInputBox>
             <RegularLabel fontSize="20">Min: 5; Max: 20</RegularLabel>
             <Link to="/game" style={{ textDecoration: 'none' }}>
-                <StartButton onClick={() => {this.startHandler()}}>
+                <ComicButton onClick={() => {this.startHandler()}}>
                     <RegularLabel fontSize="40">
                         START
                     </RegularLabel>
-                </StartButton>
+                </ComicButton>
             </Link>
         </LandingLayout>
     }

@@ -31,3 +31,5 @@ railDirectionFactoryMap.set(TileType.LEFTDOWN, (entryDirection: Vector2) => {
 
     return EMPTY_VECTOR;
 })
+
+//fill in missing direction

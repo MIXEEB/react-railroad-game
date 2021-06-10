@@ -31,6 +31,11 @@ export const dwarfCartSlice = createSlice({
     name: 'dwarfCart',
     initialState: getInitialState(),
     reducers: {
+        reset: (state: DwarfCartState, action: PayloadAction) => {
+            const initState = getInitialState()            
+            state.position = initState.position;
+            state.direction = initState.direction;
+        },
         pushCart: (state: DwarfCartState, action: PayloadAction<DwarfCartState>) => {
             state.position = action.payload.position;
             state.direction = action.payload.direction;

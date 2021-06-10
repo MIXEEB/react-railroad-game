@@ -38,19 +38,6 @@ interface Props3 {
     shadowTileImage: string
 }   
 
-/*
-    showEntranceExit(position: Vector2){
-        const { position: exitPosition } = this.props.tile.exit;
-        const { position: entrancePosition } = this.props.tileMap.entrance;
-        return (position.x == entrancePosition.x && position.y == entrancePosition.y) ||
-            (position.x == exitPosition.x && position.y == exitPosition.y);
-    } 
-*/  
-/*
-    tunnelData={getTunnelData(tile)}
-    position={tile.position}
-    groundTileImage={getTileTypeImage(TileType.EMPTY)} 
-*/
 export class TileMap extends React.Component<Props>{
     constructor(props: Props){
         super(props);
@@ -70,7 +57,6 @@ export class TileMap extends React.Component<Props>{
                                 <GroundTile key={tile.id} 
                                     tile={tile}
                                     dwarfCart={vector2Equals(dwarfCart.position, tile.position) ? dwarfCart : null}
-                                    tunnels={tileMap.tunnels}
                                     placeRailTile={placeRailTile}
                                     shadowRailTile={
                                         <ShadowRailTile 

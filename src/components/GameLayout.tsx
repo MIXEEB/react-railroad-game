@@ -7,14 +7,21 @@ import background from '../assets/background.png'
 import { TileMapState } from '../store/reducers/tileMap';
 import { DwarfCartState } from '../store/reducers/dwarfCart';
 import button from '../assets/button.png';
+import { EMPTY_VECTOR } from '../store/middleware/railHelpers';
+import ReactModal from 'react-modal';
 
 interface Props {
     dwarfCart: DwarfCartState,
     tileMap: TileMapState,
     tileQueue: Tile[],
-    countdown: number
+    countdown: number,
     placeRailTile: (tile: Tile) => void
+    restartGame: () => void
     //startClick: () => void
+}
+
+interface StateGameLayout {
+    showGameoverDialog: boolean
 }
 
 interface GameAreaProps {
@@ -61,27 +68,88 @@ const TileQueueContainer = styled.div`
     margin-left: -128px;
 `
 
-const GameAreaHeader = styled.span`
+const GameAreaSpan = styled.span`
     font-size: 40px;
     color: white;
-    font-family: 'True Crimes';
+    
     padding: 5px;
 `
 
-export class GameLayout extends React.Component<Props> {
+const GameAreaSpanBottom = styled.span`
+    position: absolute:
+    bottom: 0;
+    font-family: 'True Crimes';
+`
+
+const ComicButton = styled.div`
+    border: none;
+    background-color: Transparent;
+    width: 300px;
+    height: 120px;
+    background-image: url(${button});
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+`
+
+const GameOverFrame = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 25px;
+    width: 600px;
+    height: 400px;
+    background: rgba(255, 0, 0, 0.8);
+`
+
+const RegularLabel = styled.span`
+    font-size: 40px;
+    font-family: 'True Crimes';
+    color: white;
+`
+
+const GameOverText = styled.span`
+    font-family: 'True Crimes';
+    color: white;
+    font-size: 40px;
+`
+
+export class GameLayout extends React.Component<Props, StateGameLayout> {
     constructor(props: Props){
         super(props);
+
+        this.state = {
+            showGameoverDialog: false
+        }
+    }
+
+    componentDidUpdate(prevProps: Props){
+        if (this.props.dwarfCart.position === EMPTY_VECTOR && prevProps.dwarfCart.position !== this.props.dwarfCart.position){
+            this.setState({
+                showGameoverDialog: true
+            });
+        }
     }
 
     render() {
-        const { countdown } = this.props;
+        const { countdown, dwarfCart, restartGame } = this.props;
 
         return (<GameArea backgroundImage={background}>
-            <GameAreaHeader>{`Cart will launch in ${countdown} seconds`}</GameAreaHeader>
+            <GameAreaSpan>{`Cart will launch in ${countdown} seconds`}</GameAreaSpan>
             <GameField>
                 <TileQueueContainer><TileQueue {...this.props}></TileQueue></TileQueueContainer>
                 <TileMap {...this.props} placeRailTile={this.props.placeRailTile}></TileMap>
             </GameField>
+            <ReactModal className="modalUpdate" isOpen={this.state.showGameoverDialog}>
+                <GameOverFrame>
+                    <GameOverText>GAME OVER</GameOverText>
+                    <ComicButton onClick={() => {this.setState({showGameoverDialog: false}); restartGame()}}>
+                        <RegularLabel>Start Again?</RegularLabel>
+                    </ComicButton>
+                </GameOverFrame>
+            </ReactModal>
         </GameArea>)
     }
 }

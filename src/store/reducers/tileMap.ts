@@ -9,9 +9,6 @@ export interface Tunnel {
 
 export interface TileMapState {
     tiles: Tile[][],
- 
-    //deprecated
-    tunnels: Tunnels    
 }
 
 //tiles: TileGenerator
@@ -21,11 +18,6 @@ export interface TileMapState {
 const getInitialState = (): TileMapState => {
     return {
         tiles: [],
-
-        tunnels: {
-            entrance: { position: {x: 0, y: 0}, facingDirection: FacingDirection.bottom },
-            exit: { position: {x: 4, y: 4}, facingDirection: FacingDirection.top }
-        }          
     }
 }
 
