@@ -25,11 +25,49 @@ railDirectionFactoryMap.set(TileType.LEFTDOWN, (entryDirection: Vector2) => {
         return {x: 0, y: 1}
     }
 
-    if (x === 0 && y === 1){
-        return {x: 1, y: 0}
+    if (x === 0 && y === -1){
+        return {x: -1, y: 0}
     }
 
     return EMPTY_VECTOR;
 })
 
-//fill in missing direction
+railDirectionFactoryMap.set(TileType.LEFTUP, (entryDirection: Vector2) => {
+    
+    const {x, y} = entryDirection;
+    if (x === 1 && y === 0){
+        return {x: 0, y: -1}
+    }
+
+    if (x === 0 && y === 1) {
+        return {x: -1, y: 0}
+    }
+
+    return EMPTY_VECTOR;
+})
+
+railDirectionFactoryMap.set(TileType.RIGHTDOWN, (entryDirection: Vector2) => {
+    const {x, y} = entryDirection;
+    if (x === -1 && y === 0) {
+        return {x: 0, y: 1}
+    }
+
+    if (x === 0 && y === -1) {
+        return {x: 1, y: 0}
+    } 
+
+    return EMPTY_VECTOR;
+})
+
+railDirectionFactoryMap.set(TileType.RIGHTUP, (entryDirection: Vector2) => {
+    const {x, y} = entryDirection;
+    if (x === -1 && y === 0) {
+        return {x: 0, y: -1}
+    }
+
+    if (x === 0 && y === 1) {
+        return {x: 1, y: 0}
+    }
+
+    return EMPTY_VECTOR;
+})

@@ -19,24 +19,22 @@ interface GameProps {
     pushCartRequest: () => void
 }
 
-//add game end and restart
-//add exit
-
 interface GameState {
     countdown: number;
 }
 
-
+const COUNTDOWN: number = 20; 
 
 class Game extends React.Component<GameProps, GameState> {
     
     private pushInterval: NodeJS.Timeout | null = null;
 
+
     constructor(props: GameProps) {
         super(props);
 
         this.state = {
-            countdown: 5
+            countdown: COUNTDOWN
         }
 
         window.addEventListener('resize', this.handleResize)
@@ -54,7 +52,6 @@ class Game extends React.Component<GameProps, GameState> {
 
             if (this.state.countdown <= 0){
                 this.pushCart();
-                //console.log('clearing intervale', countdownInterval);
                 clearInterval(countdownInterval);
             }
         }, 1000) 
@@ -68,13 +65,14 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     componentDidUpdate(prevProps: GameProps) {
-        //if (this.props.dwarfCart.position === EMPTY_VECTOR){
-            
-            if (this.pushInterval && prevProps.dwarfCart.position !== this.props.dwarfCart.position && this.props.dwarfCart.position === EMPTY_VECTOR){
-                clearInterval(this.pushInterval)
-            }
-        //}
-        //if (this.pushInterval != null)
+        if (this.props.dwarfCart.win && this.props.dwarfCart.win !== prevProps.dwarfCart.win){
+            clearInterval();
+            return;
+        }
+
+        if (this.pushInterval && prevProps.dwarfCart.position !== this.props.dwarfCart.position && this.props.dwarfCart.position === EMPTY_VECTOR){
+            clearInterval(this.pushInterval)
+        }
     }
 
     restartGame = () => {
@@ -82,7 +80,7 @@ class Game extends React.Component<GameProps, GameState> {
         const x = tileMap.tiles.length;
         const y = tileMap.tiles[0].length;
         this.setState({
-            countdown: 5
+            countdown: COUNTDOWN
         });
 
         this.props.rebuild({x, y});

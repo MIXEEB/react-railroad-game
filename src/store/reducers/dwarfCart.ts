@@ -10,6 +10,7 @@ export interface DwarfCartAnimation {
 export interface DwarfCartState {
     position: Vector2,
     direction: Vector2,
+    win: boolean,
     animation: DwarfCartAnimation
 }
 
@@ -17,6 +18,7 @@ const getInitialState = (): DwarfCartState => {
     return {
         position: { x: 0, y: 1},
         direction: { x: 1, y: 0},
+        win: false,
         animation: {
             isHorizontal: true,
             isAscending: true,
@@ -35,11 +37,12 @@ export const dwarfCartSlice = createSlice({
             const initState = getInitialState()            
             state.position = initState.position;
             state.direction = initState.direction;
+            state.win = false;
         },
         pushCart: (state: DwarfCartState, action: PayloadAction<DwarfCartState>) => {
             state.position = action.payload.position;
             state.direction = action.payload.direction;
-
+            state.win = action.payload.win;
         }
     }
 })

@@ -21,7 +21,8 @@ interface Props {
 }
 
 interface StateGameLayout {
-    showGameoverDialog: boolean
+    showGameOverDialog: boolean,
+    showYouWinDialog: boolean
 }
 
 interface GameAreaProps {
@@ -104,6 +105,17 @@ const GameOverFrame = styled.div`
     background: rgba(255, 0, 0, 0.8);
 `
 
+const YouWinFrame = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 25px;
+    width: 600px;
+    height: 400px;
+    background: rgba(200, 200, 50, 0.8);
+`
+
 const RegularLabel = styled.span`
     font-size: 40px;
     font-family: 'True Crimes';
@@ -121,14 +133,21 @@ export class GameLayout extends React.Component<Props, StateGameLayout> {
         super(props);
 
         this.state = {
-            showGameoverDialog: false
+            showGameOverDialog: false,
+            showYouWinDialog: false
         }
     }
 
     componentDidUpdate(prevProps: Props){
+        if (this.props.dwarfCart.win && this.props.dwarfCart.win !== prevProps.dwarfCart.win){
+            this.setState({
+                showYouWinDialog: true
+            })
+        }
+
         if (this.props.dwarfCart.position === EMPTY_VECTOR && prevProps.dwarfCart.position !== this.props.dwarfCart.position){
             this.setState({
-                showGameoverDialog: true
+                showGameOverDialog: true
             });
         }
     }
@@ -142,10 +161,20 @@ export class GameLayout extends React.Component<Props, StateGameLayout> {
                 <TileQueueContainer><TileQueue {...this.props}></TileQueue></TileQueueContainer>
                 <TileMap {...this.props} placeRailTile={this.props.placeRailTile}></TileMap>
             </GameField>
-            <ReactModal className="modalUpdate" isOpen={this.state.showGameoverDialog}>
+
+            <ReactModal className="modalUpdate" isOpen={this.state.showYouWinDialog}>
+                <YouWinFrame>
+                <GameOverText>YOU WIN</GameOverText>
+                    <ComicButton onClick={() => {this.setState({showYouWinDialog: false}); restartGame()}}>
+                        <RegularLabel>Start Again?</RegularLabel>
+                    </ComicButton>
+                </YouWinFrame>
+            </ReactModal>
+
+            <ReactModal className="modalUpdate" isOpen={this.state.showGameOverDialog}>
                 <GameOverFrame>
                     <GameOverText>GAME OVER</GameOverText>
-                    <ComicButton onClick={() => {this.setState({showGameoverDialog: false}); restartGame()}}>
+                    <ComicButton onClick={() => {this.setState({showGameOverDialog: false}); restartGame()}}>
                         <RegularLabel>Start Again?</RegularLabel>
                     </ComicButton>
                 </GameOverFrame>

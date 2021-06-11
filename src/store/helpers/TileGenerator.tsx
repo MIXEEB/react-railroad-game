@@ -14,6 +14,32 @@ export class TileGenerator {
             }
         }
 
+        tiles[0][1] = {
+            ...tiles[0][1],
+            type: TileType.TUNNEL
+        }
+
+        tiles[fieldSize.x-1][1] = {
+            ...tiles[fieldSize.x-1][1],
+            type: TileType.TUNNEL
+        }
+
+        for(let testX = 1; testX < fieldSize.x - 1; testX++){
+            tiles[testX][1] = {
+                ...tiles[testX][1],
+                type: TileType.HORIZONTAL
+            };
+        }
+
+
+        /*
+        tiles[fieldSize.x-1][fieldSize.y-2] = {
+            ...tiles[fieldSize.x-1][fieldSize.y-1],
+            type: TileType.TUNNEL
+        }
+        */
+
+        /*
         tiles[1][1] = {
             ...tiles[1][1],
             type: TileType.HORIZONTAL
@@ -22,17 +48,17 @@ export class TileGenerator {
 
         tiles[2][1] = {
             ...tiles[2][1],
-            type: TileType.HORIZONTAL
+            type: TileType.LEFTDOWN
         }
 
-        tiles[3][1] = {
-            ...tiles[3][1],
-            type: TileType.LEFTDOWN
+        tiles[2][2] = {
+            ...tiles[2][2],
+            type: TileType.RIGHTUP
         }
 
         tiles[3][2] = {
             ...tiles[3][2],
-            type: TileType.VERTICAL
+            type: TileType.HORIZONTAL
         }
 
         
@@ -40,11 +66,11 @@ export class TileGenerator {
             ...tiles[3][3],
             type: TileType.VERTICAL
         }
+        */
         return tiles;
     }
 
     static getEmptyTileMap(fieldSize: Vector2): Tile[][] {
-        //add walls
         const tiles  = new Array(fieldSize.x);
         for (let column = 0; column < fieldSize.x; column++) {
             tiles[column] = new Array(fieldSize.y);
@@ -59,24 +85,13 @@ export class TileGenerator {
             type: TileType.TUNNEL
         }
 
-         /*
-        debugger
-        tiles[fieldSize.x-1][fieldSize.y] = {
-            ...tiles[fieldSize.x-1][fieldSize.y],
+        tiles[fieldSize.x-2][fieldSize.y-1] = {
+            ...tiles[fieldSize.x-2][fieldSize.y-1],
             type: TileType.TUNNEL
         }
-        */
-        
+
         return tiles;
     }
-
-    /*
-    export interface Tile {
-    id: string,
-    type: TileType;
-    position: Vector2;
-}
-    */
 
     static initQueue(): Tile[] {
         const tiles: Tile[] = [];

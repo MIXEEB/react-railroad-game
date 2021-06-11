@@ -8,5 +8,3 @@ export const reducer = combineReducers({
     tileQueue: tileQueueSlice.reducer,
     tileMap: tileMapSlice.reducer
 })
-//bad place for todos, but still
-//1. refactor tunnel generation (should be as a tile type)

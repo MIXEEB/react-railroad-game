@@ -11,13 +11,9 @@ export interface TileMapState {
     tiles: Tile[][],
 }
 
-//tiles: TileGenerator
-//TileGenerator.getEmptyTileMap({x: 5, y: 5}),
-//deprecated
-
 const getInitialState = (): TileMapState => {
     return {
-        tiles: [],
+        tiles: TileGenerator.getEmptyTileMap({x: 8, y:8}),
     }
 }
 
